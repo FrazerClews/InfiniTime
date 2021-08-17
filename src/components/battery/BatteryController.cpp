@@ -3,6 +3,8 @@
 #include <nrfx_saadc.h>
 #include <algorithm>
 
+#include <components/heartrate/HeartRateController.h>
+
 using namespace Pinetime::Controllers;
 
 Battery* Battery::instance = nullptr;
@@ -19,6 +21,9 @@ void Battery::Update() {
   isCharging = !nrf_gpio_pin_read(chargingPin);
   isPowerPresent = !nrf_gpio_pin_read(powerPresentPin);
 
+  if (isCharging && !Controllers::HeartRateController::States::Stopped) {
+    HeartRateController::Stop();
+  }
   if (isReading) {
     return;
   }
