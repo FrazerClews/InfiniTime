@@ -7,6 +7,7 @@
 #include "components/ble/BleController.h"
 #include "components/ble/NotificationManager.h"
 #include "components/settings/Settings.h"
+#include "components/motor/MotorController.h"
 #include "displayapp/DisplayApp.h"
 #include "displayapp/screens/WatchFaceDigital.h"
 #include "displayapp/screens/WatchFaceTerminal.h"
@@ -21,6 +22,7 @@ Clock::Clock(DisplayApp* app,
              Controllers::DateTime& dateTimeController,
              Controllers::Battery& batteryController,
              Controllers::Ble& bleController,
+             Controllers::MotorController& motorController,
              Controllers::NotificationManager& notificationManager,
              Controllers::Settings& settingsController,
              Controllers::HeartRateController& heartRateController,
@@ -30,7 +32,14 @@ Clock::Clock(DisplayApp* app,
     dateTimeController {dateTimeController},
     batteryController {batteryController},
     bleController {bleController},
+<<<<<<< HEAD
     notificationManager {notificationManager},
+||||||| parent of 06b7ca2c (WIP dnd indicator)
+    notificatioManager {notificatioManager},
+=======
+    motorController {motorController},
+    notificatioManager {notificatioManager},
+>>>>>>> 06b7ca2c (WIP dnd indicator)
     settingsController {settingsController},
     heartRateController {heartRateController},
     motionController {motionController},
@@ -78,7 +87,14 @@ std::unique_ptr<Screen> Clock::WatchFaceDigitalScreen() {
                                                      dateTimeController,
                                                      batteryController,
                                                      bleController,
+<<<<<<< HEAD
                                                      notificationManager,
+||||||| parent of 06b7ca2c (WIP dnd indicator)
+                                                     notificatioManager,
+=======
+                                                     motorController,
+                                                     notificatioManager,
+>>>>>>> 06b7ca2c (WIP dnd indicator)
                                                      settingsController,
                                                      heartRateController,
                                                      motionController);

@@ -7,6 +7,7 @@
 #include "displayapp/screens/Symbols.h"
 #include "components/battery/BatteryController.h"
 #include "components/ble/BleController.h"
+#include "components/motor/MotorController.h"
 #include "components/ble/NotificationManager.h"
 #include "components/heartrate/HeartRateController.h"
 #include "components/motion/MotionController.h"
@@ -18,6 +19,7 @@ WatchFaceDigital::WatchFaceDigital(DisplayApp* app,
                                    Controllers::DateTime& dateTimeController,
                                    Controllers::Battery& batteryController,
                                    Controllers::Ble& bleController,
+                                   Controllers::MotorController& motorController,
                                    Controllers::NotificationManager& notificationManager,
                                    Controllers::Settings& settingsController,
                                    Controllers::HeartRateController& heartRateController,
@@ -29,9 +31,13 @@ WatchFaceDigital::WatchFaceDigital(DisplayApp* app,
     settingsController {settingsController},
     heartRateController {heartRateController},
     motionController {motionController},
-    statusIcons(batteryController, bleController) {
+    statusIcons(batteryController, bleController, motorController) {
 
   statusIcons.Create();
+
+  motorIcon = lv_label_create(lv_scr_act(), nullptr);
+  lv_label_set_text_static(motorIcon, Symbols::notificationsOff);
+  lv_obj_align(motorIcon, bleIcon, LV_ALIGN_OUT_LEFT_MID, -5, 0);
 
   notificationIcon = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(notificationIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_LIME);
