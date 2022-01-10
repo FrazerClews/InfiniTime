@@ -35,6 +35,8 @@ namespace Pinetime {
 
         const char* Message() const;
         const char* Title() const;
+
+        bool read = false;
       };
       Notification::Id nextId {0};
 

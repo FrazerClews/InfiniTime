@@ -40,8 +40,10 @@ NotificationManager::Notification NotificationManager::GetNext(NotificationManag
 
   NotificationManager::Notification result;
 
-  if (currentIterator == (notifications.end() - 1))
+  if (currentIterator == (notifications.end() - 1)) {
+    notifications.back().read = true;
     result = *(notifications.begin());
+  }
   else
     result = *(currentIterator + 1);
 
@@ -49,6 +51,7 @@ NotificationManager::Notification NotificationManager::GetNext(NotificationManag
     return {};
 
   result.index = (lastNotification.id - result.id) + 1;
+  notifications[readIndex].read = true;
   return result;
 }
 
@@ -72,6 +75,7 @@ NotificationManager::Notification NotificationManager::GetPrevious(NotificationM
     return {};
 
   result.index = (lastNotification.id - result.id) + 1;
+  notifications[readIndex].read = true;
   return result;
 }
 

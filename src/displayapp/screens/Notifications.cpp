@@ -29,7 +29,8 @@ Notifications::Notifications(DisplayApp* app,
                                                      notification.category,
                                                      notificationManager.NbNotifications(),
                                                      mode,
-                                                     alertNotificationService);
+                                                     alertNotificationService,
+                                                     notification.read);
     validDisplay = true;
   } else {
     currentItem = std::make_unique<NotificationItem>("Notification",
@@ -38,7 +39,8 @@ Notifications::Notifications(DisplayApp* app,
                                                      notification.category,
                                                      notificationManager.NbNotifications(),
                                                      Modes::Preview,
-                                                     alertNotificationService);
+                                                     alertNotificationService,
+                                                     false);
   }
 
   if (mode == Modes::Preview) {
@@ -125,7 +127,8 @@ bool Notifications::OnTouchEvent(Pinetime::Applications::TouchEvents event) {
                                                        previousNotification.category,
                                                        notificationManager.NbNotifications(),
                                                        mode,
-                                                       alertNotificationService);
+                                                       alertNotificationService,
+                                                       previousNotification.read);
     }
       return true;
     case Pinetime::Applications::TouchEvents::SwipeUp: {
@@ -150,7 +153,8 @@ bool Notifications::OnTouchEvent(Pinetime::Applications::TouchEvents event) {
                                                        nextNotification.category,
                                                        notificationManager.NbNotifications(),
                                                        mode,
-                                                       alertNotificationService);
+                                                       alertNotificationService,
+                                                       nextNotification.read);
     }
       return true;
     default:
@@ -171,7 +175,8 @@ Notifications::NotificationItem::NotificationItem(const char* title,
                                                   Controllers::NotificationManager::Categories category,
                                                   uint8_t notifNb,
                                                   Modes mode,
-                                                  Pinetime::Controllers::AlertNotificationService& alertNotificationService)
+                                                  Pinetime::Controllers::AlertNotificationService& alertNotificationService,
+                                                  bool read)
   : mode {mode}, alertNotificationService {alertNotificationService} {
   lv_obj_t* container1 = lv_cont_create(lv_scr_act(), NULL);
 
@@ -191,7 +196,12 @@ Notifications::NotificationItem::NotificationItem(const char* title,
   lv_obj_align(alert_count, NULL, LV_ALIGN_IN_TOP_RIGHT, 0, 16);
 
   lv_obj_t* alert_type = lv_label_create(lv_scr_act(), nullptr);
-  lv_obj_set_style_local_text_color(alert_type, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x888888));
+  if (read == false){
+    lv_obj_set_style_local_text_color(alert_type, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x888888));
+  } else {
+    lv_obj_set_style_local_text_color(alert_type, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x666666));
+  }
+
   if (title == nullptr)
     title = "Notification";
   char* pchar;
@@ -209,7 +219,11 @@ Notifications::NotificationItem::NotificationItem(const char* title,
   switch (category) {
     default: {
       lv_obj_t* alert_subject = lv_label_create(container1, nullptr);
-      lv_obj_set_style_local_text_color(alert_subject, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_ORANGE);
+      if (read == false){
+        lv_obj_set_style_local_text_color(alert_subject, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_ORANGE);
+      } else {
+        lv_obj_set_style_local_text_color(alert_type, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x666666));
+      }
       lv_label_set_long_mode(alert_subject, LV_LABEL_LONG_BREAK);
       lv_obj_set_width(alert_subject, LV_HOR_RES - 20);
       lv_label_set_text(alert_subject, msg);
@@ -217,7 +231,12 @@ Notifications::NotificationItem::NotificationItem(const char* title,
     case Controllers::NotificationManager::Categories::IncomingCall: {
       lv_obj_set_height(container1, 108);
       lv_obj_t* alert_subject = lv_label_create(container1, nullptr);
-      lv_obj_set_style_local_text_color(alert_subject, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_ORANGE);
+      if (read == false){
+        lv_obj_set_style_local_text_color(alert_subject, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_ORANGE);
+        read = true;
+      } else {
+        lv_obj_set_style_local_text_color(alert_type, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x666666));
+      }
       lv_label_set_long_mode(alert_subject, LV_LABEL_LONG_BREAK);
       lv_obj_set_width(alert_subject, LV_HOR_RES - 20);
       lv_label_set_text(alert_subject, "Incoming call from");
