@@ -320,6 +320,7 @@ void DisplayApp::LoadApp(Apps app, DisplayApp::FullRefreshDirections direction) 
                                                        dateTimeController,
                                                        batteryController,
                                                        bleController,
+                                                       motorController,
                                                        notificationManager,
                                                        settingsController,
                                                        heartRateController,

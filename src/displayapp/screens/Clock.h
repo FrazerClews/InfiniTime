@@ -7,6 +7,7 @@
 #include <components/heartrate/HeartRateController.h>
 #include "displayapp/screens/Screen.h"
 #include "components/datetime/DateTimeController.h"
+#include "components/motor/MotorController.h"
 
 namespace Pinetime {
   namespace Controllers {
@@ -25,6 +26,7 @@ namespace Pinetime {
               Controllers::DateTime& dateTimeController,
               Controllers::Battery& batteryController,
               Controllers::Ble& bleController,
+              Controllers::MotorController& motorController,
               Controllers::NotificationManager& notificatioManager,
               Controllers::Settings& settingsController,
               Controllers::HeartRateController& heartRateController,
@@ -38,6 +40,7 @@ namespace Pinetime {
         Controllers::DateTime& dateTimeController;
         Controllers::Battery& batteryController;
         Controllers::Ble& bleController;
+        Controllers::MotorController& motorController;
         Controllers::NotificationManager& notificatioManager;
         Controllers::Settings& settingsController;
         Controllers::HeartRateController& heartRateController;

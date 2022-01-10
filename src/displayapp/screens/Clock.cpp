@@ -7,6 +7,7 @@
 #include "components/ble/BleController.h"
 #include "components/ble/NotificationManager.h"
 #include "components/settings/Settings.h"
+#include "components/motor/MotorController.h"
 #include "displayapp/DisplayApp.h"
 #include "displayapp/screens/WatchFaceDigital.h"
 #include "displayapp/screens/WatchFaceTerminal.h"
@@ -19,6 +20,7 @@ Clock::Clock(DisplayApp* app,
              Controllers::DateTime& dateTimeController,
              Controllers::Battery& batteryController,
              Controllers::Ble& bleController,
+             Controllers::MotorController& motorController,
              Controllers::NotificationManager& notificatioManager,
              Controllers::Settings& settingsController,
              Controllers::HeartRateController& heartRateController,
@@ -27,6 +29,7 @@ Clock::Clock(DisplayApp* app,
     dateTimeController {dateTimeController},
     batteryController {batteryController},
     bleController {bleController},
+    motorController {motorController},
     notificatioManager {notificatioManager},
     settingsController {settingsController},
     heartRateController {heartRateController},
@@ -68,6 +71,7 @@ std::unique_ptr<Screen> Clock::WatchFaceDigitalScreen() {
                                                      dateTimeController,
                                                      batteryController,
                                                      bleController,
+                                                     motorController,
                                                      notificatioManager,
                                                      settingsController,
                                                      heartRateController,

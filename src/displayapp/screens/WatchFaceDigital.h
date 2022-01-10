@@ -8,6 +8,7 @@
 #include "displayapp/screens/Screen.h"
 #include "components/datetime/DateTimeController.h"
 #include "components/ble/BleController.h"
+#include "components/motor/MotorController.h"
 
 namespace Pinetime {
   namespace Controllers {
@@ -28,6 +29,7 @@ namespace Pinetime {
                          Controllers::DateTime& dateTimeController,
                          Controllers::Battery& batteryController,
                          Controllers::Ble& bleController,
+                         Controllers::MotorController& motorController,
                          Controllers::NotificationManager& notificatioManager,
                          Controllers::Settings& settingsController,
                          Controllers::HeartRateController& heartRateController,
@@ -60,6 +62,7 @@ namespace Pinetime {
         lv_obj_t* label_time_ampm;
         lv_obj_t* label_date;
         lv_obj_t* bleIcon;
+        lv_obj_t* motorIcon;
         lv_obj_t* batteryPlug;
         lv_obj_t* heartbeatIcon;
         lv_obj_t* heartbeatValue;
@@ -72,6 +75,7 @@ namespace Pinetime {
         Controllers::DateTime& dateTimeController;
         Controllers::Battery& batteryController;
         Controllers::Ble& bleController;
+        Controllers::MotorController& motorController;
         Controllers::NotificationManager& notificatioManager;
         Controllers::Settings& settingsController;
         Controllers::HeartRateController& heartRateController;

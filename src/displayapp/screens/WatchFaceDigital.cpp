@@ -5,10 +5,12 @@
 #include <cstdio>
 #include "displayapp/screens/BatteryIcon.h"
 #include "displayapp/screens/BleIcon.h"
+#include "displayapp/screens/MotorIcon.h"
 #include "displayapp/screens/NotificationIcon.h"
 #include "displayapp/screens/Symbols.h"
 #include "components/battery/BatteryController.h"
 #include "components/ble/BleController.h"
+#include "components/motor/MotorController.h"
 #include "components/ble/NotificationManager.h"
 #include "components/heartrate/HeartRateController.h"
 #include "components/motion/MotionController.h"
@@ -19,6 +21,7 @@ WatchFaceDigital::WatchFaceDigital(DisplayApp* app,
                                    Controllers::DateTime& dateTimeController,
                                    Controllers::Battery& batteryController,
                                    Controllers::Ble& bleController,
+                                   Controllers::MotorController& motorController,
                                    Controllers::NotificationManager& notificatioManager,
                                    Controllers::Settings& settingsController,
                                    Controllers::HeartRateController& heartRateController,
@@ -28,6 +31,7 @@ WatchFaceDigital::WatchFaceDigital(DisplayApp* app,
     dateTimeController {dateTimeController},
     batteryController {batteryController},
     bleController {bleController},
+    motorController {motorController},
     notificatioManager {notificatioManager},
     settingsController {settingsController},
     heartRateController {heartRateController},
@@ -45,6 +49,10 @@ WatchFaceDigital::WatchFaceDigital(DisplayApp* app,
   lv_obj_set_style_local_text_color(bleIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x0082FC));
   lv_label_set_text_static(bleIcon, Symbols::bluetooth);
   lv_obj_align(bleIcon, batteryPlug, LV_ALIGN_OUT_LEFT_MID, -5, 0);
+
+  motorIcon = lv_label_create(lv_scr_act(), nullptr);
+  lv_label_set_text_static(motorIcon, Symbols::notificationsOff);
+  lv_obj_align(motorIcon, bleIcon, LV_ALIGN_OUT_LEFT_MID, -5, 0);
 
   notificationIcon = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(notificationIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x00FF00));
@@ -110,8 +118,16 @@ void WatchFaceDigital::Refresh() {
   if (bleState.IsUpdated() || bleRadioEnabled.IsUpdated()) {
     lv_label_set_text_static(bleIcon, BleIcon::GetIcon(bleState.Get()));
   }
+
+  if (settingsController.GetNotificationStatus() == Controllers::Settings::Notification::OFF) {
+    lv_label_set_text(motorIcon, BleIcon::GetIcon(true)); // TODO on update
+  }
+
+  lv_obj_realign(batteryIcon);
   lv_obj_realign(batteryPlug);
   lv_obj_realign(bleIcon);
+  lv_obj_realign(motorIcon);
+
 
   notificationState = notificatioManager.AreNewNotificationsAvailable();
   if (notificationState.IsUpdated()) {
