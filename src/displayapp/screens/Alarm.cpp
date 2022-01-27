@@ -15,6 +15,8 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
+#include <string>
+
 #include "displayapp/screens/Alarm.h"
 #include "displayapp/screens/Screen.h"
 #include "displayapp/screens/Symbols.h"
@@ -222,8 +224,45 @@ void Alarm::ShowInfo() {
     auto minToAlarm = (timeToAlarm % 3600) / 60;
     auto secToAlarm = timeToAlarm % 60;
 
-    lv_label_set_text_fmt(
-      txtMessage, "Time to\nalarm:\n%2lu Days\n%2lu Hours\n%2lu Minutes\n%2lu Seconds", daysToAlarm, hrsToAlarm, minToAlarm, secToAlarm);
+    char message[53] = "Time to\nalarm:\n";
+    char temp[12];
+    if (daysToAlarm != 0) {
+      if (daysToAlarm != 1) {
+        snprintf(temp, 9, " %1lu Days\n", daysToAlarm);
+        strncat(message, temp, 8);
+      } else {
+        snprintf(temp, 8, " %1lu Day\n", daysToAlarm);
+        strncat(message, temp, 7);
+      }
+    }
+    if (hrsToAlarm != 0) {
+      if (hrsToAlarm != 1) {
+        snprintf(temp, 10, "%2lu Hours\n", hrsToAlarm);
+        strncat(message, temp, 9);
+      } else {
+        snprintf(temp, 9, " %1lu Hour\n", hrsToAlarm);
+        strncat(message, temp, 8);
+      }
+    }
+    if (minToAlarm != 0) {
+      if (minToAlarm != 1) {
+        snprintf(temp, 12, "%2lu Minutes\n", minToAlarm);
+        strncat(message, temp, 11);
+      } else {
+        snprintf(temp, 11, " %1lu Minute\n", minToAlarm);
+        strncat(message, temp, 10);
+      }
+    }
+    if (secToAlarm != 0) {
+      if (secToAlarm != 1) {
+        snprintf(temp, 11, "%2lu Seconds", secToAlarm);
+        strncat(message, temp, 10);
+      } else {
+        snprintf(temp, 10, " %1lu Second", secToAlarm);
+        strncat(message, temp, 9);
+      }
+    }
+    lv_label_set_text_fmt(txtMessage, message);
   } else {
     lv_label_set_text(txtMessage, "Alarm\nis not\nset.");
   }
