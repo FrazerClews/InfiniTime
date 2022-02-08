@@ -50,10 +50,13 @@ inline void lv_img_set_src_arr(lv_obj_t* img, const lv_img_dsc_t* src_img) {
 Music::Music(Pinetime::Applications::DisplayApp* app, Pinetime::Controllers::MusicService& music) : Screen(app), musicService(music) {
   lv_obj_t* label;
 
+  lv_style_init(&btnPlayPause_style);
+  lv_style_set_radius(&btnPlayPause_style, LV_STATE_DEFAULT, 20);
+  lv_style_set_bg_color(&btnPlayPause_style, LV_STATE_DEFAULT, LV_COLOR_AQUA);
+  lv_style_set_bg_opa(&btnPlayPause_style, LV_STATE_DEFAULT, LV_OPA_20);
+
   lv_style_init(&btn_style);
-  lv_style_set_radius(&btn_style, LV_STATE_DEFAULT, 20);
-  lv_style_set_bg_color(&btn_style, LV_STATE_DEFAULT, LV_COLOR_AQUA);
-  lv_style_set_bg_opa(&btn_style, LV_STATE_DEFAULT, LV_OPA_20);
+  lv_style_set_bg_opa(&btn_style, LV_STATE_DEFAULT, LV_OPA_TRANSP);
 
   btnVolDown = lv_btn_create(lv_scr_act(), nullptr);
   btnVolDown->user_data = this;
@@ -98,45 +101,47 @@ Music::Music(Pinetime::Applications::DisplayApp* app, Pinetime::Controllers::Mus
   lv_obj_set_event_cb(btnPlayPause, event_handler);
   lv_obj_set_size(btnPlayPause, 76, 76);
   lv_obj_align(btnPlayPause, nullptr, LV_ALIGN_IN_BOTTOM_MID, 0, 0);
-  lv_obj_add_style(btnPlayPause, LV_STATE_DEFAULT, &btn_style);
+  lv_obj_add_style(btnPlayPause, LV_STATE_DEFAULT, &btnPlayPause_style);
   txtPlayPause = lv_label_create(btnPlayPause, nullptr);
   lv_label_set_text(txtPlayPause, Symbols::play);
 
   txtTrackDuration = lv_label_create(lv_scr_act(), nullptr);
   lv_label_set_long_mode(txtTrackDuration, LV_LABEL_LONG_SROLL);
-  lv_obj_align(txtTrackDuration, nullptr, LV_ALIGN_IN_TOP_LEFT, 12, 20);
-  lv_label_set_text(txtTrackDuration, "--:--/--:--");
+  lv_obj_align(txtTrackDuration, nullptr, LV_ALIGN_IN_BOTTOM_LEFT, 0, -75);
+  lv_label_set_text(txtTrackDuration, "--:--");
   lv_label_set_align(txtTrackDuration, LV_ALIGN_IN_LEFT_MID);
   lv_obj_set_width(txtTrackDuration, LV_HOR_RES);
+
+  progressBar = lv_bar_create(lv_scr_act(), nullptr);
+  lv_obj_set_size(progressBar, 106, 5);
+  lv_obj_align(progressBar, nullptr, LV_ALIGN_IN_BOTTOM_MID, 0, -85);
+  lv_bar_set_anim_time(progressBar, 10);
+  lv_bar_set_range(progressBar, 0, 100);
+  lv_bar_set_value(progressBar, 0, LV_ANIM_OFF);
+
+  txtTrackLength = lv_label_create(lv_scr_act(), nullptr);
+  lv_label_set_long_mode(txtTrackLength, LV_LABEL_LONG_SROLL);
+  lv_obj_align(txtTrackLength, nullptr, LV_ALIGN_IN_BOTTOM_RIGHT, -16, -75);
+  lv_label_set_text(txtTrackLength, "--:--");
+  lv_label_set_align(txtTrackLength, LV_ALIGN_IN_RIGHT_MID);
+  lv_obj_set_width(txtTrackLength, LV_HOR_RES);
 
   constexpr uint8_t FONT_HEIGHT = 12;
   constexpr uint8_t LINE_PAD = 15;
   constexpr int8_t MIDDLE_OFFSET = -25;
   txtArtist = lv_label_create(lv_scr_act(), nullptr);
   lv_label_set_long_mode(txtArtist, LV_LABEL_LONG_SROLL_CIRC);
-  lv_obj_align(txtArtist, nullptr, LV_ALIGN_IN_LEFT_MID, 12, MIDDLE_OFFSET + 1 * FONT_HEIGHT);
-  lv_label_set_align(txtArtist, LV_ALIGN_IN_LEFT_MID);
-  lv_obj_set_width(txtArtist, LV_HOR_RES - 12);
+  lv_obj_align(txtArtist, nullptr, LV_ALIGN_CENTER, -30, MIDDLE_OFFSET + 1 * FONT_HEIGHT);
+  lv_label_set_align(txtArtist, LV_LABEL_ALIGN_CENTER);
+  lv_obj_set_width(txtArtist, LV_HOR_RES);
   lv_label_set_text(txtArtist, "Artist Name");
 
   txtTrack = lv_label_create(lv_scr_act(), nullptr);
   lv_label_set_long_mode(txtTrack, LV_LABEL_LONG_SROLL_CIRC);
-  lv_obj_align(txtTrack, nullptr, LV_ALIGN_IN_LEFT_MID, 12, MIDDLE_OFFSET + 2 * FONT_HEIGHT + LINE_PAD);
-
-  lv_label_set_align(txtTrack, LV_ALIGN_IN_LEFT_MID);
-  lv_obj_set_width(txtTrack, LV_HOR_RES - 12);
+  lv_obj_align(txtTrack, nullptr, LV_ALIGN_CENTER, 0, -16);
+  lv_label_set_align(txtTrack, LV_LABEL_ALIGN_CENTER);
+  lv_obj_set_width(txtTrack, LV_HOR_RES);
   lv_label_set_text(txtTrack, "This is a very long getTrack name");
-
-  /** Init animation */
-  imgDisc = lv_img_create(lv_scr_act(), nullptr);
-  lv_img_set_src_arr(imgDisc, &disc);
-  lv_obj_align(imgDisc, nullptr, LV_ALIGN_IN_TOP_RIGHT, -15, 15);
-
-  imgDiscAnim = lv_img_create(lv_scr_act(), nullptr);
-  lv_img_set_src_arr(imgDiscAnim, &disc_f_1);
-  lv_obj_align(imgDiscAnim, nullptr, LV_ALIGN_IN_TOP_RIGHT, -15 - 32, 15);
-
-  frameB = false;
 
   musicService.event(Controllers::MusicService::EVENT_MUSIC_OPEN);
 
@@ -185,18 +190,12 @@ void Music::Refresh() {
     totalLength = musicService.getTrackLength();
     UpdateLength();
   }
+  int16_t pc = ((float)currentLength / (float)totalLength) * 100.0f;
+  lv_bar_set_value(progressBar, pc, LV_ANIM_OFF);
 
   if (playing == Pinetime::Controllers::MusicService::MusicStatus::Playing) {
     lv_label_set_text(txtPlayPause, Symbols::pause);
     if (xTaskGetTickCount() - 1024 >= lastIncrement) {
-
-      if (frameB) {
-        lv_img_set_src(imgDiscAnim, &disc_f_1);
-      } else {
-        lv_img_set_src(imgDiscAnim, &disc_f_2);
-      }
-      frameB = !frameB;
-
       if (currentLength < totalLength) {
         currentLength +=
           static_cast<int>((static_cast<float>(xTaskGetTickCount() - lastIncrement) / 1024.0f) * musicService.getPlaybackSpeed());
@@ -217,25 +216,32 @@ void Music::Refresh() {
 
 void Music::UpdateLength() {
   if (totalLength > (99 * 60 * 60)) {
-    lv_label_set_text(txtTrackDuration, "Inf/Inf");
+    lv_label_set_text(txtTrackDuration, "Inf");
+    lv_label_set_text(txtTrackLength, "Inf");
   } else if (totalLength > (99 * 60)) {
-    char timer[12];
+    char timer[6];
     sprintf(timer,
-            "%02d:%02d/%02d:%02d",
+            "%02d:%02d",
             (currentLength / (60 * 60)) % 100,
-            ((currentLength % (60 * 60)) / 60) % 100,
+            ((currentLength % (60 * 60)) / 60) % 100);
+    lv_label_set_text(txtTrackDuration, timer);
+    sprintf(timer,
+            "%02d:%02d",
             (totalLength / (60 * 60)) % 100,
             ((totalLength % (60 * 60)) / 60) % 100);
-    lv_label_set_text(txtTrackDuration, timer);
+    lv_label_set_text(txtTrackLength, timer);
   } else {
-    char timer[12];
+    char timer[6];
     sprintf(timer,
-            "%02d:%02d/%02d:%02d",
+            "%02d:%02d",
             (currentLength / 60) % 100,
-            (currentLength % 60) % 100,
+            (currentLength % 60) % 100);
+    lv_label_set_text(txtTrackDuration, timer);
+    sprintf(timer,
+            "%02d:%02d",
             (totalLength / 60) % 100,
             (totalLength % 60) % 100);
-    lv_label_set_text(txtTrackDuration, timer);
+    lv_label_set_text(txtTrackLength, timer);
   }
 }
 

@@ -53,14 +53,13 @@ namespace Pinetime {
         lv_obj_t* txtTrack;
         lv_obj_t* txtPlayPause;
 
-        lv_obj_t* imgDisc;
-        lv_obj_t* imgDiscAnim;
         lv_obj_t* txtTrackDuration;
+        lv_obj_t* progressBar;
+        lv_obj_t* txtTrackLength;
 
+
+        lv_style_t btnPlayPause_style;
         lv_style_t btn_style;
-
-        /** For the spinning disc animation */
-        bool frameB;
 
         Pinetime::Controllers::MusicService& musicService;
 
