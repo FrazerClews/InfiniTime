@@ -1,12 +1,13 @@
 #include "displayapp/screens/FirmwareUpdate.h"
 #include <lvgl/lvgl.h>
 #include "components/ble/BleController.h"
+#include "components/battery/BatteryController.h"
 #include "displayapp/DisplayApp.h"
 
 using namespace Pinetime::Applications::Screens;
 
-FirmwareUpdate::FirmwareUpdate(Pinetime::Applications::DisplayApp* app, Pinetime::Controllers::Ble& bleController)
-  : Screen(app), bleController {bleController} {
+FirmwareUpdate::FirmwareUpdate(Pinetime::Applications::DisplayApp* app, Pinetime::Controllers::Battery& batteryController, Pinetime::Controllers::Ble& bleController)
+  : Screen(app), batteryController {batteryController}, bleController {bleController} {
 
   lv_obj_t* backgroundLabel = lv_label_create(lv_scr_act(), nullptr);
   lv_label_set_long_mode(backgroundLabel, LV_LABEL_LONG_CROP);
@@ -40,6 +41,12 @@ FirmwareUpdate::~FirmwareUpdate() {
 }
 
 void FirmwareUpdate::Refresh() {
+  if (batteryController.PercentRemaining() <= 10) {
+    lv_label_set_recolor(percentLabel, true);
+    lv_label_set_text(percentLabel, "#ff0000 Battery low#");
+    startTime = xTaskGetTickCount();
+    state = States::Error;
+  }
   switch (bleController.State()) {
     default:
     case Pinetime::Controllers::Ble::FirmwareUpdateStates::Idle:
