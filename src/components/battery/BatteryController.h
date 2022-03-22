@@ -44,6 +44,7 @@ namespace Pinetime {
       bool isCharging = false;
       bool isPowerPresent = false;
       bool firstMeasurement = true;
+      bool alertLowBattery = true;
 
       void SaadcInit();
 

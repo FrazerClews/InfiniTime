@@ -18,6 +18,13 @@ void Battery::ReadPowerState() {
   isCharging = !nrf_gpio_pin_read(PinMap::Charging);
   isPowerPresent = !nrf_gpio_pin_read(PinMap::PowerPresent);
 
+  if (alertLowBattery && !IsCharging() && PercentRemaining() <= 10) {
+    alertLowBattery = false;
+    systemTask->PushMessage(System::Messages::AlertLowBattery);
+  } else if (!alertLowBattery && IsCharging()) {
+    alertLowBattery = true;
+  }
+
   if (isPowerPresent && !isCharging) {
     isFull = true;
   } else if (!isPowerPresent) {

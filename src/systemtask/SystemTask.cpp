@@ -433,6 +433,9 @@ void SystemTask::Work() {
         case Messages::BatteryPercentageUpdated:
           nimbleController.NotifyBatteryLevel(batteryController.PercentRemaining());
           break;
+        case Messages::AlertLowBattery:
+            displayApp.PushMessage(Pinetime::Applications::Display::Messages::NewNotification);
+          break;
         case Messages::OnPairing:
           if (isSleeping && !isWakingUp) {
             GoToRunning();
