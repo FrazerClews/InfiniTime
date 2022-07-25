@@ -123,7 +123,6 @@ void WatchFaceDigital::Refresh() {
     lv_label_set_text(motorIcon, BleIcon::GetIcon(true)); // TODO on update
   }
 
-  lv_obj_realign(batteryIcon);
   lv_obj_realign(batteryPlug);
   lv_obj_realign(bleIcon);
   lv_obj_realign(motorIcon);
