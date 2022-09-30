@@ -41,14 +41,8 @@ namespace Pinetime {
         Controllers::DateTime& dateTimeController;
         Controllers::Battery& batteryController;
         Controllers::Ble& bleController;
-<<<<<<< HEAD
-        Controllers::NotificationManager& notificationManager;
-||||||| parent of 06b7ca2c (WIP dnd indicator)
-        Controllers::NotificationManager& notificatioManager;
-=======
         Controllers::MotorController& motorController;
-        Controllers::NotificationManager& notificatioManager;
->>>>>>> 06b7ca2c (WIP dnd indicator)
+        Controllers::NotificationManager& notificationManager;
         Controllers::Settings& settingsController;
         Controllers::HeartRateController& heartRateController;
         Controllers::MotionController& motionController;

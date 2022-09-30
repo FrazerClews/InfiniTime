@@ -3,8 +3,8 @@
 
 using namespace Pinetime::Applications::Widgets;
 
-StatusIcons::StatusIcons(Controllers::Battery& batteryController, Controllers::Ble& bleController)
-  : batteryController {batteryController}, bleController {bleController} {
+StatusIcons::StatusIcons(Controllers::Battery& batteryController, Controllers::Ble& bleController, Controllers::MotorController& motorController, Controllers::Settings& settingsController)
+  : batteryController {batteryController}, bleController {bleController}, motorController {motorController}, settingsController {settingsController} {
 }
 
 void StatusIcons::Create() {
@@ -16,6 +16,10 @@ void StatusIcons::Create() {
 
   bleIcon = lv_label_create(container, nullptr);
   lv_label_set_text_static(bleIcon, Screens::Symbols::bluetooth);
+
+  motorIcon = lv_label_create(container, nullptr);
+  lv_obj_set_style_local_text_color(motorIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0xFFFFFF));
+  lv_label_set_text_static(motorIcon, Screens::Symbols::bluetooth);
 
   batteryPlug = lv_label_create(container, nullptr);
   lv_label_set_text_static(batteryPlug, Screens::Symbols::plug);
@@ -41,6 +45,10 @@ void StatusIcons::Update() {
   bleRadioEnabled = bleController.IsRadioEnabled();
   if (bleState.IsUpdated() || bleRadioEnabled.IsUpdated()) {
     lv_obj_set_hidden(bleIcon, !bleState.Get());
+  }
+
+  if (settingsController.GetNotificationStatus() == Pinetime::Controllers::Settings::Notification::ON) {
+    lv_obj_set_hidden(motorIcon, settingsController.GetNotificationStatus() == Pinetime::Controllers::Settings::Notification::ON);
   }
 
   lv_obj_realign(container);

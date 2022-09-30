@@ -31,13 +31,9 @@ WatchFaceDigital::WatchFaceDigital(DisplayApp* app,
     settingsController {settingsController},
     heartRateController {heartRateController},
     motionController {motionController},
-    statusIcons(batteryController, bleController, motorController) {
+    statusIcons(batteryController, bleController, motorController, settingsController) {
 
   statusIcons.Create();
-
-  motorIcon = lv_label_create(lv_scr_act(), nullptr);
-  lv_label_set_text_static(motorIcon, Symbols::notificationsOff);
-  lv_obj_align(motorIcon, bleIcon, LV_ALIGN_OUT_LEFT_MID, -5, 0);
 
   notificationIcon = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(notificationIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, LV_COLOR_LIME);

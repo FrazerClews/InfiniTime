@@ -8,6 +8,7 @@
 #include "components/datetime/DateTimeController.h"
 #include "components/settings/Settings.h"
 #include "components/battery/BatteryController.h"
+#include "components/motor/MotorController.h"
 #include "displayapp/screens/Symbols.h"
 #include "displayapp/screens/Tile.h"
 
@@ -20,6 +21,7 @@ namespace Pinetime {
                                  Pinetime::Controllers::Settings& settingsController,
                                  Pinetime::Controllers::Battery& batteryController,
                                  Pinetime::Controllers::Ble& bleController,
+                                 Pinetime::Controllers::MotorController& motorController,
                                  Controllers::DateTime& dateTimeController);
         ~ApplicationList() override;
         bool OnTouchEvent(TouchEvents event) override;
@@ -31,6 +33,7 @@ namespace Pinetime {
         Controllers::Settings& settingsController;
         Pinetime::Controllers::Battery& batteryController;
         Pinetime::Controllers::Ble& bleController;
+        Pinetime::Controllers::MotorController& motorController;
         Controllers::DateTime& dateTimeController;
 
         static constexpr int appsPerScreen = 6;

@@ -8,6 +8,7 @@
 #include "components/datetime/DateTimeController.h"
 #include "components/settings/Settings.h"
 #include "components/battery/BatteryController.h"
+#include "components/motor/MotorController.h"
 #include "displayapp/widgets/PageIndicator.h"
 #include "displayapp/widgets/StatusIcons.h"
 
@@ -28,6 +29,7 @@ namespace Pinetime {
                       Controllers::Battery& batteryController,
                       Controllers::Ble& bleController,
                       Controllers::DateTime& dateTimeController,
+                      Controllers::MotorController& motorController,
                       std::array<Applications, 6>& applications);
 
         ~Tile() override;

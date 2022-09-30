@@ -7,6 +7,7 @@
 #include "displayapp/screens/Screen.h"
 #include "components/datetime/DateTimeController.h"
 #include "components/ble/BleController.h"
+#include "components/motor/MotorController.h"
 #include "displayapp/widgets/StatusIcons.h"
 
 namespace Pinetime {
@@ -14,6 +15,7 @@ namespace Pinetime {
     class Settings;
     class Battery;
     class Ble;
+    class MotorController;
     class NotificationManager;
     class HeartRateController;
     class MotionController;
@@ -60,9 +62,6 @@ namespace Pinetime {
         lv_obj_t* label_time;
         lv_obj_t* label_time_ampm;
         lv_obj_t* label_date;
-        lv_obj_t* bleIcon;
-        lv_obj_t* motorIcon;
-        lv_obj_t* batteryPlug;
         lv_obj_t* heartbeatIcon;
         lv_obj_t* heartbeatValue;
         lv_obj_t* stepIcon;
@@ -70,16 +69,10 @@ namespace Pinetime {
         lv_obj_t* notificationIcon;
 
         Controllers::DateTime& dateTimeController;
-<<<<<<< HEAD
-        Controllers::NotificationManager& notificationManager;
-||||||| parent of 06b7ca2c (WIP dnd indicator)
-        Controllers::NotificationManager& notificatioManager;
-=======
         Controllers::Battery& batteryController;
         Controllers::Ble& bleController;
         Controllers::MotorController& motorController;
-        Controllers::NotificationManager& notificatioManager;
->>>>>>> 06b7ca2c (WIP dnd indicator)
+        Controllers::NotificationManager& notificationManager;
         Controllers::Settings& settingsController;
         Controllers::HeartRateController& heartRateController;
         Controllers::MotionController& motionController;

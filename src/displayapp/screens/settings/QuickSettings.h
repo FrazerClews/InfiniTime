@@ -21,7 +21,7 @@ namespace Pinetime {
                       Pinetime::Controllers::Battery& batteryController,
                       Controllers::DateTime& dateTimeController,
                       Controllers::BrightnessController& brightness,
-                      Controllers::MotorController& motorController,
+                      Pinetime::Controllers::MotorController& motorController,
                       Pinetime::Controllers::Settings& settingsController,
                       Controllers::Ble& bleController);
 

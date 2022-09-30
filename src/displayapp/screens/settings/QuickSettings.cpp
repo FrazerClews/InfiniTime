@@ -31,7 +31,7 @@ QuickSettings::QuickSettings(Pinetime::Applications::DisplayApp* app,
                              Pinetime::Controllers::Battery& batteryController,
                              Controllers::DateTime& dateTimeController,
                              Controllers::BrightnessController& brightness,
-                             Controllers::MotorController& motorController,
+                             Pinetime::Controllers::MotorController& motorController,
                              Pinetime::Controllers::Settings& settingsController,
                              Controllers::Ble& bleController)
   : Screen(app),
@@ -39,7 +39,7 @@ QuickSettings::QuickSettings(Pinetime::Applications::DisplayApp* app,
     brightness {brightness},
     motorController {motorController},
     settingsController {settingsController},
-    statusIcons(batteryController, bleController) {
+    statusIcons(batteryController, bleController, motorController, settingsController) {
 
   statusIcons.Create();
 

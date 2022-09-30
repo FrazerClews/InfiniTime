@@ -5,6 +5,8 @@
 #include "displayapp/screens/Screen.h"
 #include "components/battery/BatteryController.h"
 #include "components/ble/BleController.h"
+#include "components/motor/MotorController.h"
+#include "components/settings/Settings.h"
 #include "displayapp/screens/BatteryIcon.h"
 
 namespace Pinetime {
@@ -12,7 +14,7 @@ namespace Pinetime {
     namespace Widgets {
       class StatusIcons {
       public:
-        StatusIcons(Controllers::Battery& batteryController, Controllers::Ble& bleController);
+        StatusIcons(Controllers::Battery& batteryController, Controllers::Ble& bleController, Controllers::MotorController& motorController, Controllers::Settings& settingsController);
         void Align();
         void Create();
         lv_obj_t* GetObject() {
@@ -24,6 +26,8 @@ namespace Pinetime {
         Screens::BatteryIcon batteryIcon;
         Pinetime::Controllers::Battery& batteryController;
         Controllers::Ble& bleController;
+        Controllers::MotorController& motorController;
+        Controllers::Settings& settingsController;
 
         Screens::DirtyValue<uint8_t> batteryPercentRemaining {};
         Screens::DirtyValue<bool> powerPresent {};
@@ -32,6 +36,7 @@ namespace Pinetime {
 
         lv_obj_t* bleIcon;
         lv_obj_t* batteryPlug;
+        lv_obj_t* motorIcon;
         lv_obj_t* container;
       };
     }
