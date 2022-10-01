@@ -81,6 +81,11 @@ void Notifications::Refresh() {
     }
   }
 
+  time_t current_time = time(NULL);
+  if (current_time - set_time >= 1) {
+    notificationManager.Get(currentId).ChangeAlertType();
+  }
+
   if (dismissingNotification) {
     dismissingNotification = false;
     auto notification = notificationManager.Get(currentId);
@@ -286,7 +291,7 @@ Notifications::NotificationItem::NotificationItem(const char* title,
     }
     lv_label_refr_text(alert_type);
   }
-  lv_label_set_long_mode(alert_type, LV_LABEL_LONG_SROLL_CIRC);
+  lv_label_set_long_mode(alert_type, LV_LABEL_LONG_CROP);
   lv_obj_set_width(alert_type, 197);
   lv_obj_align(alert_type, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 16);
 
@@ -354,6 +359,10 @@ void Notifications::NotificationItem::OnCallButtonEvent(lv_obj_t* obj, lv_event_
   }
 
   running = false;
+}
+
+void Notifications::NotificationItem::ChangeAlertType() {
+  lv_label_set_long_mode(alert_type, LV_LABEL_LONG_SROLL_CIRC);
 }
 
 Notifications::NotificationItem::~NotificationItem() {

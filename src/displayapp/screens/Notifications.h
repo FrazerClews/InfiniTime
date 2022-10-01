@@ -1,5 +1,6 @@
 #pragma once
 
+#include <ctime>
 #include <lvgl/lvgl.h>
 #include <FreeRTOS.h>
 #include <cstdint>
@@ -46,6 +47,7 @@ namespace Pinetime {
           bool IsRunning() const {
             return running;
           }
+          void ChangeAlertType();
           void OnCallButtonEvent(lv_obj_t*, lv_event_t event);
 
         private:
@@ -79,6 +81,7 @@ namespace Pinetime {
         TickType_t timeoutTickCountStart;
 
         static const TickType_t timeoutLength = pdMS_TO_TICKS(7000);
+        time_t set_time = time(NULL);
         bool interacted = true;
 
         bool dismissingNotification = false;
