@@ -47,8 +47,8 @@ void StatusIcons::Update() {
     lv_obj_set_hidden(bleIcon, !bleState.Get());
   }
 
-  if (settingsController.GetNotificationStatus() == Pinetime::Controllers::Settings::Notification::ON) {
-    lv_obj_set_hidden(motorIcon, settingsController.GetNotificationStatus() == Pinetime::Controllers::Settings::Notification::ON);
+  if (settingsController.GetNotificationStatus() == Pinetime::Controllers::Settings::Notification::On) {
+    lv_obj_set_hidden(motorIcon, settingsController.GetNotificationStatus() == Pinetime::Controllers::Settings::Notification::On);
   }
 
   lv_obj_realign(container);

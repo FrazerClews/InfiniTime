@@ -32,14 +32,8 @@ Clock::Clock(DisplayApp* app,
     dateTimeController {dateTimeController},
     batteryController {batteryController},
     bleController {bleController},
-<<<<<<< HEAD
-    notificationManager {notificationManager},
-||||||| parent of 06b7ca2c (WIP dnd indicator)
-    notificatioManager {notificatioManager},
-=======
     motorController {motorController},
-    notificatioManager {notificatioManager},
->>>>>>> 06b7ca2c (WIP dnd indicator)
+    notificationManager {notificationManager},
     settingsController {settingsController},
     heartRateController {heartRateController},
     motionController {motionController},
@@ -87,14 +81,8 @@ std::unique_ptr<Screen> Clock::WatchFaceDigitalScreen() {
                                                      dateTimeController,
                                                      batteryController,
                                                      bleController,
-<<<<<<< HEAD
-                                                     notificationManager,
-||||||| parent of 06b7ca2c (WIP dnd indicator)
-                                                     notificatioManager,
-=======
                                                      motorController,
-                                                     notificatioManager,
->>>>>>> 06b7ca2c (WIP dnd indicator)
+                                                     notificationManager,
                                                      settingsController,
                                                      heartRateController,
                                                      motionController);
