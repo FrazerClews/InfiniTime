@@ -16,8 +16,18 @@ void MotionController::Update(int16_t x, int16_t y, int16_t z, uint32_t nbSteps)
   this->z = z;
   int32_t deltaSteps = nbSteps - this->nbSteps;
   this->nbSteps = nbSteps;
+  printf("%d\n", deltaSteps);
   if (deltaSteps > 0) {
+    this->lastMoveTime = time(NULL);
     currentTripSteps += deltaSteps;
+    if (showNotification == true) {
+      showNotification = false;
+    }
+  }
+
+  if (this->lastMoveTime + 10 == time(NULL) && showNotification == false) {
+    showNotification = true;
+    systemTask->PushMessage(System::Messages::StandNotification);
   }
 }
 

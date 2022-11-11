@@ -439,6 +439,17 @@ void SystemTask::Work() {
             nimbleController.DisableRadio();
           }
           break;
+        case Messages::StandNotification:
+          {
+            Pinetime::Controllers::NotificationManager::Notification notif;
+            std::array<char, 101> message {"Stand\0Please stand\0"};
+            notif.message = message;
+            notif.size = 20;
+            notif.category = Pinetime::Controllers::NotificationManager::Categories::SimpleAlert;
+            notificationManager.Push(std::move(notif));
+            PushMessage(Messages::OnNewNotification);
+          }
+          break;
         default:
           break;
       }

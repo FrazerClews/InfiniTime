@@ -67,6 +67,9 @@ namespace Pinetime {
       int16_t lastZForShake = 0;
       int32_t accumulatedspeed = 0;
       uint32_t lastShakeTime = 0;
+
+      int lastMoveTime = time(NULL);
+      bool showNotification = false;
     };
   }
 }
