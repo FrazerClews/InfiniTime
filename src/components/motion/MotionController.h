@@ -68,7 +68,7 @@ namespace Pinetime {
       int32_t accumulatedspeed = 0;
       uint32_t lastShakeTime = 0;
 
-      int lastMoveTime = time(NULL);
+      std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds> lastMoveTime;
       bool showNotification = false;
     };
   }

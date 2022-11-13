@@ -18,14 +18,14 @@ void MotionController::Update(int16_t x, int16_t y, int16_t z, uint32_t nbSteps)
   this->nbSteps = nbSteps;
   printf("%d\n", deltaSteps);
   if (deltaSteps > 0) {
-    this->lastMoveTime = time(NULL);
+    this->lastMoveTime = dateTimeController.CurrentDateTime();
     currentTripSteps += deltaSteps;
     if (showNotification == true) {
       showNotification = false;
     }
   }
 
-  if (this->lastMoveTime + 10 == time(NULL) && showNotification == false) {
+  if ((this->lastMoveTime + 10 == dateTimeController.CurrentDateTime()) && showNotification == false) {
     showNotification = true;
     systemTask->PushMessage(System::Messages::StandNotification);
   }
